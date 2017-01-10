@@ -1,0 +1,10 @@
+services:
+    best_it.ct_listing_slug_router.router:
+        class: BestIt\CtListingSlugRouter\Router\ListingRouter
+        arguments:
+            - '@best_it.ct_listing_slug_router.listing_repository'
+            - '%best_it.ct_listing_slug_router.controller%'
+            - '%best_it.ct_listing_slug_router.route%'
+        tags:
+            - { name: router, priority: '%best_it.ct_listing_slug_router.priority%' }
+
