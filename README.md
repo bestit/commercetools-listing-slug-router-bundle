@@ -34,6 +34,19 @@ best_it_ct_listing_slug_router:
     route:                best_it_frontend_listing_listing_index
 ```
 
+## Generate route
+Just use the standard symfony `path` function in twig for generating routes. It requires the route name as name and the param `slug` with the seo url.
+Additional arguments will be passed as query.
+
+Example:
+```
+{# /apple #}
+{{ path('best_it_frontend_listing_listing_index', {'slug' => 'apple') }}
+
+{# /apple?page=1&view=list #}
+{{ path('best_it_frontend_listing_listing_index', {'page' => 1, slug' => 'apple', 'view' => 'list') }}
+```
+
 ## Further ToDos
 
 * The lib folder could be moved to a separate repo.

@@ -1,0 +1,87 @@
+{
+  "id": "e068f1d3-5ca4-4f15-a776-b2ba5b3efcb1",
+  "version": 1,
+  "name": {
+    "de": "Mundpflege"
+  },
+  "slug": {
+    "de": "haustechnik-ht-koerperpflege-mundpflege"
+  },
+  "ancestors": [
+    {
+      "typeId": "category",
+      "id": "163b79c3-a421-4077-8374-7abdc6b10b5c",
+      "obj": {
+        "id": "163b79c3-a421-4077-8374-7abdc6b10b5c",
+        "version": 1,
+        "name": {
+          "de": "Haustechnik (HT)"
+        },
+        "slug": {
+          "de": "haustechnik-ht"
+        },
+        "ancestors": [],
+        "orderHint": "0.00001472639934147508180750",
+        "createdAt": "2016-08-31T10:38:54.147Z",
+        "lastModifiedAt": "2016-08-31T10:38:54.147Z",
+        "assets": [],
+        "lastMessageSequenceNumber": 1
+      }
+    },
+    {
+      "typeId": "category",
+      "id": "a103e0b2-ecff-482d-9511-1b7b21f0560d",
+      "obj": {
+        "id": "a103e0b2-ecff-482d-9511-1b7b21f0560d",
+        "version": 1,
+        "name": {
+          "de": "Körperpflege"
+        },
+        "slug": {
+          "de": "haustechnik-ht-koerperpflege"
+        },
+        "ancestors": [
+          {
+            "typeId": "category",
+            "id": "163b79c3-a421-4077-8374-7abdc6b10b5c",
+            "obj": {
+              "id": "163b79c3-a421-4077-8374-7abdc6b10b5c",
+              "version": 1,
+              "name": {
+                "de": "Haustechnik (HT)"
+              },
+              "slug": {
+                "de": "haustechnik-ht"
+              },
+              "ancestors": [],
+              "orderHint": "0.00001472639934147508180750",
+              "createdAt": "2016-08-31T10:38:54.147Z",
+              "lastModifiedAt": "2016-08-31T10:38:54.147Z",
+              "assets": [],
+              "lastMessageSequenceNumber": 1
+            }
+          }
+        ],
+        "parent": {
+          "typeId": "category",
+          "id": "163b79c3-a421-4077-8374-7abdc6b10b5c"
+        },
+        "orderHint": "0.000014726399342011640973161",
+        "createdAt": "2016-08-31T10:38:54.201Z",
+        "lastModifiedAt": "2016-08-31T10:38:54.201Z",
+        "assets": [],
+        "lastMessageSequenceNumber": 1
+      }
+    }
+  ],
+  "parent": {
+    "typeId": "category",
+    "id": "a103e0b2-ecff-482d-9511-1b7b21f0560d"
+  },
+  "orderHint": "0.000014726399342611680407219",
+  "createdAt": "2016-08-31T10:38:54.261Z",
+  "lastModifiedAt": "2016-08-31T10:38:54.261Z",
+  "externalId": "440203",
+  "assets": [],
+  "lastMessageSequenceNumber": 1
+}
