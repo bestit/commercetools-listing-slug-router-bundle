@@ -4,6 +4,9 @@ namespace BestIt\CtListingSlugRouter\Router;
 
 use BestIt\CtListingSlugRouter\Exception\CategoryNotFoundException;
 use BestIt\CtListingSlugRouter\Repository\CategoryRepositoryInterface;
+use Commercetools\Core\Model\Category\Category;
+use InvalidArgumentException;
+use Symfony\Cmf\Component\Routing\VersatileGeneratorInterface;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use Symfony\Component\Routing\RequestContext;
@@ -12,59 +15,51 @@ use Symfony\Component\Routing\RouterInterface;
 
 /**
  * Listing router
- *
  * @author chowanski <chowanski@bestit-online.de>
  * @package BestIt\CtListingSlugRouter
  * @subpackage Router
  * @version $id$
  */
-class ListingRouter implements RouterInterface
+class ListingRouter implements RouterInterface, VersatileGeneratorInterface
 {
     /**
      * The default controller.
-     *
      * @var string
      */
     const DEFAULT_CONTROLLER = 'BestIt\Frontend\ListingBundle\Controller\ListingController::indexAction';
 
     /**
      * The default route.
-     *
      * @var string
      */
     const DEFAULT_ROUTE = 'best_it_frontend_listing_listing_index';
 
     /**
      * The logical/full name for the used controller.
-     *
      * @var string
      */
     private $controller = '';
 
     /**
      * The repository to fetch categories by slug.
-     *
      * @var CategoryRepositoryInterface
      */
     private $repository;
 
     /**
      * The used route name for this router.
-     *
      * @var string
      */
     private $route = '';
 
     /**
      * The request context
-     *
      * @var RequestContext
      */
     private $context;
 
     /**
      * ListingRouter constructor.
-     *
      * @param CategoryRepositoryInterface $repository
      * @param string $controller
      * @param string $route
@@ -85,7 +80,26 @@ class ListingRouter implements RouterInterface
      */
     public function generate($name, $parameters = [], $referenceType = self::ABSOLUTE_PATH)
     {
-        throw new RouteNotFoundException('Not supported by ListingRouter');
+        if ($referenceType != self::ABSOLUTE_PATH) {
+            throw new RouteNotFoundException('Only `absolute path` is allowed for category route generation');
+        }
+
+        if (is_string($name)) {
+            $slug = $this->getSlugByName($name, $parameters);
+        } else {
+            $slug = $this->getSlugByObject($name);
+        }
+
+        if (!$slug) {
+            throw new RouteNotFoundException('Not category found for route ' . (string)$name);
+        }
+
+        $url = sprintf('%s/%s', $this->getContext()->getBaseUrl(), $slug);
+        if ($query = http_build_query($parameters)) {
+            $url .= sprintf('?%s', $query);
+        }
+
+        return $url;
     }
 
     /**
@@ -98,7 +112,6 @@ class ListingRouter implements RouterInterface
 
     /**
      * Returns the logical/full name for the used controller.
-     *
      * @return string
      */
     private function getController(): string
@@ -108,7 +121,6 @@ class ListingRouter implements RouterInterface
 
     /**
      * Returns the repository to fetch categories by slug.
-     *
      * @return CategoryRepositoryInterface
      */
     private function getRepository(): CategoryRepositoryInterface
@@ -118,7 +130,6 @@ class ListingRouter implements RouterInterface
 
     /**
      * Returns the used route name for this router.
-     *
      * @return string
      */
     private function getRoute(): string
@@ -132,6 +143,52 @@ class ListingRouter implements RouterInterface
     public function getRouteCollection(): RouteCollection
     {
         return new RouteCollection();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getRouteDebugMessage($name, array $parameters = [])
+    {
+        return (string)$name;
+    }
+
+    /**
+     * Get category slug by name
+     * @param string $name
+     * @param array $params
+     * @return string|null
+     */
+    private function getSlugByName(string $name, array &$params)
+    {
+        $slug = null;
+
+        if ($name === $this->getRoute()) {
+            if (array_key_exists('slug', $params)) {
+                $slug = $params['slug'];
+                unset($params['slug']); // we do not want to add this to query
+            } else {
+                throw new InvalidArgumentException('Missing param `slug` for category route generation');
+            }
+        }
+
+        return $slug;
+    }
+
+    /**
+     * Get category slug by object
+     * @param $object
+     * @return null|string
+     */
+    private function getSlugByObject($object)
+    {
+        $slug = null;
+
+        if ($object instanceof Category) {
+            $slug = ($value = $object->getSlug()) ? $value->getLocalized() : null;
+        }
+
+        return $slug;
     }
 
     /**
@@ -164,7 +221,6 @@ class ListingRouter implements RouterInterface
 
     /**
      * Sets the logical/full name for the used controller.
-     *
      * @param string $controller
      * @return ListingRouter
      */
@@ -177,7 +233,6 @@ class ListingRouter implements RouterInterface
 
     /**
      * Sets the repository to fetch categories by slug.
-     *
      * @param CategoryRepositoryInterface $repository
      * @return ListingRouter
      */
@@ -190,7 +245,6 @@ class ListingRouter implements RouterInterface
 
     /**
      * Sets the used route name for this router.
-     *
      * @param string $route
      * @return ListingRouter
      */
@@ -199,5 +253,13 @@ class ListingRouter implements RouterInterface
         $this->route = $route;
 
         return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function supports($name)
+    {
+        return $name instanceof Category || $name == $this->getRoute();
     }
 }
