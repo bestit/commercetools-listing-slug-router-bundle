@@ -4,16 +4,9 @@ This router loads a category matching the given request uri to categories slugs.
 
 ## Install it
 
-    "repositories": [
-        {
-            "type": "vcs",
-            "url":  "git@bitbucket.org:best-it/commercetools-listing-slug-router-bundle.git"
-        }
-    ]
-    
-**Then do:**
-
-    composer require bestit/commercetools-listing-slug-router-bundle
+```console
+$ composer require bestit/commercetools-listing-slug-router-bundle
+```
 
 ## Configuration
 
