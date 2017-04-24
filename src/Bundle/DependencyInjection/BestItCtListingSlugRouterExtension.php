@@ -32,9 +32,6 @@ class BestItCtListingSlugRouterExtension extends Extension
         $container->setParameter('best_it.ct_listing_slug_router.controller', $config['controller']);
         $container->setParameter('best_it.ct_listing_slug_router.priority', $config['priority']);
         $container->setParameter('best_it.ct_listing_slug_router.route', $config['route']);
-
-        if (@$config['repository']) {
-            $container->setAlias('best_it.ct_listing_slug_router.listing_repository', $config['repository']);
-        }
+        $container->setAlias('best_it.ct_listing_slug_router.listing_repository', $config['repository']);
     }
 }

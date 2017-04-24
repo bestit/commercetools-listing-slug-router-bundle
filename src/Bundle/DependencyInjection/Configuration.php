@@ -36,10 +36,11 @@ class Configuration implements ConfigurationInterface
                 ->end()
                 ->scalarNode('repository')
                     ->info(
-                        'Service id for the repository loading categories with their slug. You should fulfill the ' .
-                        'provided interface.'
+                        'Service id for the repository loading categories with their slug. You should fulfill ' .
+                        'the provided interface.'
                     )
                     ->cannotBeEmpty()
+                    ->isRequired()
                 ->end()
                 ->scalarNode('route')
                     ->info('Which route name is used for a positive match?')
