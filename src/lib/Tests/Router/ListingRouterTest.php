@@ -9,11 +9,14 @@ use Commercetools\Core\Model\Category\Category;
 use Commercetools\Core\Model\Common\Context;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
+use PHPUnit_Framework_MockObject_MockObject;
+use Symfony\Cmf\Component\Routing\VersatileGeneratorInterface;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\RouteCollection;
+use Symfony\Component\Routing\RouterInterface;
 
 /**
  * Tests the listing router
@@ -26,6 +29,18 @@ use Symfony\Component\Routing\RouteCollection;
  */
 class ListingRouterTest extends TestCase
 {
+    /**
+     * The used repository.
+     * @var CategoryRepositoryInterface|PHPUnit_Framework_MockObject_MockObject
+     */
+    private $repo = null;
+
+    /**
+     * The tested router.
+     * @var ListingRouter
+     */
+    private $router = null;
+
     /**
      * Returns a decoded category fixture
      * @param string $filename
@@ -50,18 +65,38 @@ class ListingRouterTest extends TestCase
     }
 
     /**
+     * Sets up the test.
+     * @return void
+     */
+    protected function setUp()
+    {
+        $this->router = new ListingRouter($this->repo = static::createMock(CategoryRepositoryInterface::class));
+    }
+
+    /**
+     * Checks the constants of the router.
+     * @return void
+     */
+    public function testConstants()
+    {
+        static::assertSame('best_it_frontend_listing_listing_index', ListingRouter::DEFAULT_ROUTE);
+        static::assertSame(
+            'BestIt\Frontend\ListingBundle\Controller\ListingController::indexAction',
+            ListingRouter::DEFAULT_CONTROLLER
+        );
+    }
+
+    /**
      * Test context property (getter / setter)
      *
      * @return void
      */
     public function testContextProperty()
     {
-        $categoryRepository = $this->createMock(CategoryRepositoryInterface::class);
         $context = new RequestContext();
 
-        $router = new ListingRouter($categoryRepository);
-        $router->setContext($context);
-        static::assertSame($context, $router->getContext());
+        $this->router->setContext($context);
+        static::assertSame($context, $this->router->getContext());
     }
 
     /**
@@ -73,10 +108,7 @@ class ListingRouterTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
 
-        $categoryRepository = $this->createMock(CategoryRepositoryInterface::class);
-
-        $router = new ListingRouter($categoryRepository);
-        $router->generate('best_it_frontend_listing_listing_index');
+        $this->router->generate('best_it_frontend_listing_listing_index');
     }
 
     /**
@@ -86,13 +118,11 @@ class ListingRouterTest extends TestCase
      */
     public function testGenerateRouteByName()
     {
-        $categoryRepository = $this->createMock(CategoryRepositoryInterface::class);
-        $router = new ListingRouter($categoryRepository);
-        $router->setContext(new RequestContext());
+        $this->router->setContext(new RequestContext());
 
         static::assertSame(
             '/foobar',
-            $router->generate('best_it_frontend_listing_listing_index', ['slug' => 'foobar'])
+            $this->router->generate('best_it_frontend_listing_listing_index', ['slug' => 'foobar'])
         );
     }
 
@@ -103,14 +133,11 @@ class ListingRouterTest extends TestCase
      */
     public function testGenerateRouteByNameWithQuery()
     {
-        $categoryRepository = $this->createMock(CategoryRepositoryInterface::class);
-
-        $router = new ListingRouter($categoryRepository);
-        $router->setContext(new RequestContext());
+        $this->router->setContext(new RequestContext());
 
         static::assertSame(
             '/foobar?best=it',
-            $router->generate('best_it_frontend_listing_listing_index', ['slug' => 'foobar', 'best' => 'it'])
+            $this->router->generate('best_it_frontend_listing_listing_index', ['slug' => 'foobar', 'best' => 'it'])
         );
     }
 
@@ -121,14 +148,11 @@ class ListingRouterTest extends TestCase
      */
     public function testGenerateRouteByNameWithQueryAndBaseUrl()
     {
-        $categoryRepository = $this->createMock(CategoryRepositoryInterface::class);
-
-        $router = new ListingRouter($categoryRepository);
-        $router->setContext(new RequestContext('/app_dev.php'));
+        $this->router->setContext(new RequestContext('/app_dev.php'));
 
         static::assertSame(
             '/app_dev.php/foobar?best=it',
-            $router->generate('best_it_frontend_listing_listing_index', ['slug' => 'foobar', 'best' => 'it'])
+            $this->router->generate('best_it_frontend_listing_listing_index', ['slug' => 'foobar', 'best' => 'it'])
         );
     }
 
@@ -139,16 +163,13 @@ class ListingRouterTest extends TestCase
      */
     public function testGenerateRouteByObject()
     {
-        $categoryRepository = $this->createMock(CategoryRepositoryInterface::class);
-
-        $router = new ListingRouter($categoryRepository);
-        $router->setContext(new RequestContext());
+        $this->router->setContext(new RequestContext());
 
         $category = $this->getCategoryFixture('category.json');
 
         static::assertSame(
             '/haustechnik-ht-koerperpflege-mundpflege',
-            $router->generate($category)
+            $this->router->generate($category)
         );
     }
 
@@ -159,16 +180,13 @@ class ListingRouterTest extends TestCase
      */
     public function testGenerateRouteByObjectWithQuery()
     {
-        $categoryRepository = $this->createMock(CategoryRepositoryInterface::class);
-
-        $router = new ListingRouter($categoryRepository);
-        $router->setContext(new RequestContext());
+        $this->router->setContext(new RequestContext());
 
         $category = $this->getCategoryFixture('category.json');
 
         static::assertSame(
             '/haustechnik-ht-koerperpflege-mundpflege?foo=bar&best=it',
-            $router->generate($category, ['foo' => 'bar', 'best' => 'it'])
+            $this->router->generate($category, ['foo' => 'bar', 'best' => 'it'])
         );
     }
 
@@ -179,16 +197,13 @@ class ListingRouterTest extends TestCase
      */
     public function testGenerateRouteByObjectWithQueryAndBaseUrl()
     {
-        $categoryRepository = $this->createMock(CategoryRepositoryInterface::class);
-
-        $router = new ListingRouter($categoryRepository);
-        $router->setContext(new RequestContext('/app_dev.php'));
+        $this->router->setContext(new RequestContext('/app_dev.php'));
 
         $category = $this->getCategoryFixture('category.json');
 
         static::assertSame(
             '/app_dev.php/haustechnik-ht-koerperpflege-mundpflege?foo=bar&best=it',
-            $router->generate($category, ['foo' => 'bar', 'best' => 'it'])
+            $this->router->generate($category, ['foo' => 'bar', 'best' => 'it'])
         );
     }
 
@@ -201,10 +216,7 @@ class ListingRouterTest extends TestCase
     {
         $this->expectException(RouteNotFoundException::class);
 
-        $categoryRepository = $this->createMock(CategoryRepositoryInterface::class);
-
-        $router = new ListingRouter($categoryRepository);
-        $router->generate('foobar', [], UrlGeneratorInterface::ABSOLUTE_URL);
+        $this->router->generate('foobar', [], UrlGeneratorInterface::ABSOLUTE_URL);
     }
 
     /**
@@ -216,10 +228,7 @@ class ListingRouterTest extends TestCase
     {
         $this->expectException(RouteNotFoundException::class);
 
-        $categoryRepository = $this->createMock(CategoryRepositoryInterface::class);
-
-        $router = new ListingRouter($categoryRepository);
-        $router->generate('foobar', [], UrlGeneratorInterface::NETWORK_PATH);
+        $this->router->generate('foobar', [], UrlGeneratorInterface::NETWORK_PATH);
     }
 
     /**
@@ -231,10 +240,7 @@ class ListingRouterTest extends TestCase
     {
         $this->expectException(RouteNotFoundException::class);
 
-        $categoryRepository = $this->createMock(CategoryRepositoryInterface::class);
-
-        $router = new ListingRouter($categoryRepository);
-        $router->generate('foobar', [], UrlGeneratorInterface::RELATIVE_PATH);
+        $this->router->generate('foobar', [], UrlGeneratorInterface::RELATIVE_PATH);
     }
 
     /**
@@ -246,10 +252,7 @@ class ListingRouterTest extends TestCase
     {
         $this->expectException(RouteNotFoundException::class);
 
-        $categoryRepository = $this->createMock(CategoryRepositoryInterface::class);
-
-        $router = new ListingRouter($categoryRepository);
-        $router->generate('foobar');
+        $this->router->generate('foobar');
     }
 
     /**
@@ -259,10 +262,26 @@ class ListingRouterTest extends TestCase
      */
     public function testGetRouteCollection()
     {
-        $categoryRepository = $this->createMock(CategoryRepositoryInterface::class);
+        static::assertEquals(new RouteCollection(), $this->router->getRouteCollection());
+    }
 
-        $router = new ListingRouter($categoryRepository);
-        static::assertEquals(new RouteCollection(), $router->getRouteCollection());
+    /**
+     * Checks the getter.
+     * @return void
+     */
+    public function testGetRouteDebugMessage()
+    {
+        static::assertSame($name = uniqid(), $this->router->getRouteDebugMessage($name));
+    }
+
+    /**
+     * Checks if the required api is registered.
+     * @return void
+     */
+    public function testInterfaces()
+    {
+        static::assertInstanceOf(RouterInterface::class, $this->router);
+        static::assertInstanceOf(VersatileGeneratorInterface::class, $this->router);
     }
 
     /**
@@ -274,11 +293,11 @@ class ListingRouterTest extends TestCase
     {
         $this->expectException(ResourceNotFoundException::class);
 
-        $categoryRepository = $this->createMock(CategoryRepositoryInterface::class);
-        $categoryRepository->method('getCategoryBySlug')->willThrowException(new CategoryNotFoundException());
+        $this->repo
+            ->method('getCategoryBySlug')
+            ->willThrowException(new CategoryNotFoundException());
 
-        $router = new ListingRouter($categoryRepository);
-        $router->match('foobar');
+        $this->router->match('foobar');
     }
 
     /**
@@ -296,12 +315,35 @@ class ListingRouterTest extends TestCase
             'category' => $category,
         ];
 
-        $categoryRepository = $this->createMock(CategoryRepositoryInterface::class);
-        $categoryRepository->method('getCategoryBySlug')
+        $this->repo
+            ->method('getCategoryBySlug')
             ->with(self::equalTo($pathInfo))
             ->willReturn($category);
 
-        $router = new ListingRouter($categoryRepository);
-        static::assertSame($expectedResponse, $router->match($pathInfo));
+        static::assertSame($expectedResponse, $this->router->match($pathInfo));
+    }
+
+    /**
+     * Checks the default return of the method.
+     */
+    public function testSupportsDefault()
+    {
+        static::assertFalse($this->router->supports(uniqid()));
+    }
+
+    /**
+     * Checks the return of the method by category.
+     */
+    public function testSupportsTrueByModel()
+    {
+        static::assertTrue($this->router->supports(new Category()));
+    }
+
+    /**
+     * Checks the return of the method by route.
+     */
+    public function testSupportsTrueByRoute()
+    {
+        static::assertTrue($this->router->supports(ListingRouter::DEFAULT_ROUTE));
     }
 }
