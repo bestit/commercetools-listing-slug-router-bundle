@@ -3,6 +3,7 @@
 namespace BestIt\CtListingSlugRouter\Router;
 
 use BestIt\CtListingSlugRouter\Exception\CategoryNotFoundException;
+use BestIt\CtListingSlugRouter\Exception\ForbiddenCharsException;
 use BestIt\CtListingSlugRouter\Repository\CategoryRepositoryInterface;
 use Commercetools\Core\Model\Category\Category;
 use InvalidArgumentException;
@@ -34,6 +35,13 @@ class ListingRouter implements RouterInterface, VersatileGeneratorInterface
      * @var string
      */
     const DEFAULT_ROUTE = 'best_it_frontend_listing_listing_index';
+
+    /**
+     * Any character not included in this expression is considered a forbidden character.
+     *
+     * @var string
+     */
+    const FORBIDDEN_CHARS_REGEX = '/[^-a-zA-Z0-9_\/]/';
 
     /**
      * The logical/full name for the used controller.
@@ -237,6 +245,10 @@ class ListingRouter implements RouterInterface, VersatileGeneratorInterface
     public function match($pathInfo): array
     {
         try {
+            if (preg_match(self::FORBIDDEN_CHARS_REGEX, $pathInfo)) {
+                throw new ForbiddenCharsException($pathInfo . ' is not allowed to have special characters!');
+            }
+
             $category = $this->getRepository()->getCategoryBySlug(trim($pathInfo, '/'));
         } catch (CategoryNotFoundException $e) {
             throw new ResourceNotFoundException('Not category found for slug ' . $pathInfo);

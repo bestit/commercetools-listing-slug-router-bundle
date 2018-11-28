@@ -3,6 +3,7 @@
 namespace BestIt\CtListingSlugRouter\Tests;
 
 use BestIt\CtListingSlugRouter\Exception\CategoryNotFoundException;
+use BestIt\CtListingSlugRouter\Exception\ForbiddenCharsException;
 use BestIt\CtListingSlugRouter\Repository\CategoryRepositoryInterface;
 use BestIt\CtListingSlugRouter\Router\ListingRouter;
 use Commercetools\Core\Model\Category\Category;
@@ -293,16 +294,29 @@ class ListingRouterTest extends TestCase
     }
 
     /**
+     * Check if the parameter contains special characters
+     *
+     * @return void
+     */
+    public function testMatchFailedWithForbiddenCharsException()
+    {
+        $this->expectException(ForbiddenCharsException::class);
+
+        $this->router->match('!"§');
+    }
+
+    /**
      * Test match method with unknown entity
      *
      * @return void
      */
-    public function testMatchFailed()
+    public function testMatchFailedWithExceptionMapping()
     {
         $this->expectException(ResourceNotFoundException::class);
 
         $this->repo
             ->method('getCategoryBySlug')
+            ->with('foobar')
             ->willThrowException(new CategoryNotFoundException());
 
         $this->router->match('foobar');
