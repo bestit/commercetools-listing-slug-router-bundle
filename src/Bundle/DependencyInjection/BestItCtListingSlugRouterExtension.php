@@ -9,17 +9,18 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
 /**
  * Loads the config for the bundle.
+ *
  * @author chowanski <chowanski@bestit-online.de>
- * @package BestIt\CtListingSlugRouterBundle
- * @subpackage DependencyInjection
- * @version $id$
+ * @package BestIt\CtListingSlugRouterBundle\DependencyInjection
  */
 class BestItCtListingSlugRouterExtension extends Extension
 {
     /**
      * Loads the bundle config.
+     *
      * @param array $configs
      * @param ContainerBuilder $container
+     *
      * @return void
      */
     public function load(array $configs, ContainerBuilder $container)

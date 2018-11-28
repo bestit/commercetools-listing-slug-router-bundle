@@ -9,7 +9,6 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
  *
  * @author chowanski <chowanski@bestit-online.de>
  * @package BestIt\CtListingSlugRouterBundle
- * @version $id$
  */
 class BestItCtListingSlugRouterBundle extends Bundle
 {

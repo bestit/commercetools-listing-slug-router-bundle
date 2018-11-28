@@ -15,51 +15,57 @@ use Symfony\Component\Routing\RouterInterface;
 
 /**
  * Listing router
+ *
  * @author chowanski <chowanski@bestit-online.de>
- * @package BestIt\CtListingSlugRouter
- * @subpackage Router
- * @version $id$
+ * @package BestIt\CtListingSlugRouter\Router
  */
 class ListingRouter implements RouterInterface, VersatileGeneratorInterface
 {
     /**
      * The default controller.
+     *
      * @var string
      */
     const DEFAULT_CONTROLLER = 'BestIt\Frontend\ListingBundle\Controller\ListingController::indexAction';
 
     /**
      * The default route.
+     *
      * @var string
      */
     const DEFAULT_ROUTE = 'best_it_frontend_listing_listing_index';
 
     /**
      * The logical/full name for the used controller.
+     *
      * @var string
      */
     private $controller = '';
 
     /**
      * The repository to fetch categories by slug.
+     *
      * @var CategoryRepositoryInterface
      */
     private $repository;
 
     /**
      * The used route name for this router.
+     *
      * @var string
      */
     private $route = '';
 
     /**
      * The request context
+     *
      * @var RequestContext
      */
     private $context;
 
     /**
      * ListingRouter constructor.
+     *
      * @param CategoryRepositoryInterface $repository
      * @param string $controller
      * @param string $route
@@ -67,7 +73,7 @@ class ListingRouter implements RouterInterface, VersatileGeneratorInterface
     public function __construct(
         CategoryRepositoryInterface $repository,
         string $controller = self::DEFAULT_CONTROLLER,
-        $route = self::DEFAULT_ROUTE
+        string $route = self::DEFAULT_ROUTE
     ) {
         $this
             ->setController($controller)
@@ -76,7 +82,15 @@ class ListingRouter implements RouterInterface, VersatileGeneratorInterface
     }
 
     /**
-     * @inheritdoc
+     * Generates a route.
+     *
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
+     *
+     * @param string $name
+     * @param array $parameters
+     * @param int $referenceType
+     *
+     * @return string
      */
     public function generate($name, $parameters = [], $referenceType = self::ABSOLUTE_PATH)
     {
@@ -91,7 +105,7 @@ class ListingRouter implements RouterInterface, VersatileGeneratorInterface
         }
 
         if (!$slug) {
-            throw new RouteNotFoundException('Not category found for route ' . (string)$name);
+            throw new RouteNotFoundException('Not category found for route ' . (string) $name);
         }
 
         $url = sprintf('%s/%s', $this->getContext()->getBaseUrl(), $slug);
@@ -103,7 +117,9 @@ class ListingRouter implements RouterInterface, VersatileGeneratorInterface
     }
 
     /**
-     * @inheritdoc
+     * Returns the context.
+     *
+     * @return RequestContext
      */
     public function getContext(): RequestContext
     {
@@ -112,6 +128,7 @@ class ListingRouter implements RouterInterface, VersatileGeneratorInterface
 
     /**
      * Returns the logical/full name for the used controller.
+     *
      * @return string
      */
     private function getController(): string
@@ -121,6 +138,7 @@ class ListingRouter implements RouterInterface, VersatileGeneratorInterface
 
     /**
      * Returns the repository to fetch categories by slug.
+     *
      * @return CategoryRepositoryInterface
      */
     private function getRepository(): CategoryRepositoryInterface
@@ -130,6 +148,7 @@ class ListingRouter implements RouterInterface, VersatileGeneratorInterface
 
     /**
      * Returns the used route name for this router.
+     *
      * @return string
      */
     private function getRoute(): string
@@ -138,7 +157,9 @@ class ListingRouter implements RouterInterface, VersatileGeneratorInterface
     }
 
     /**
-     * @inheritdoc
+     * Returns the route collection.
+     *
+     * @return RouteCollection
      */
     public function getRouteCollection(): RouteCollection
     {
@@ -146,17 +167,26 @@ class ListingRouter implements RouterInterface, VersatileGeneratorInterface
     }
 
     /**
-     * @inheritdoc
+     * Returns the route debug message.
+     *
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
+     *
+     * @param mixed $name
+     * @param array $parameters
+     *
+     * @return string
      */
     public function getRouteDebugMessage($name, array $parameters = [])
     {
-        return (string)$name;
+        return (string) $name;
     }
 
     /**
      * Get category slug by name
+     *
      * @param string $name
      * @param array $params
+     *
      * @return string|null
      */
     private function getSlugByName(string $name, array &$params)
@@ -177,7 +207,11 @@ class ListingRouter implements RouterInterface, VersatileGeneratorInterface
 
     /**
      * Get category slug by object
-     * @param $object
+     *
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
+     *
+     * @param mixed $object
+     *
      * @return null|string
      */
     private function getSlugByObject($object)
@@ -192,7 +226,13 @@ class ListingRouter implements RouterInterface, VersatileGeneratorInterface
     }
 
     /**
-     * @inheritdoc
+     * Matches path infos to a route.
+     *
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
+     *
+     * @param string $pathInfo
+     *
+     * @return array
      */
     public function match($pathInfo): array
     {
@@ -210,7 +250,13 @@ class ListingRouter implements RouterInterface, VersatileGeneratorInterface
     }
 
     /**
-     * @inheritdoc
+     * Sets the context.
+     *
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
+     *
+     * @param RequestContext $context
+     *
+     * @return ListingRouter
      */
     public function setContext(RequestContext $context): ListingRouter
     {
@@ -221,7 +267,9 @@ class ListingRouter implements RouterInterface, VersatileGeneratorInterface
 
     /**
      * Sets the logical/full name for the used controller.
+     *
      * @param string $controller
+     *
      * @return ListingRouter
      */
     private function setController(string $controller): ListingRouter
@@ -233,7 +281,9 @@ class ListingRouter implements RouterInterface, VersatileGeneratorInterface
 
     /**
      * Sets the repository to fetch categories by slug.
+     *
      * @param CategoryRepositoryInterface $repository
+     *
      * @return ListingRouter
      */
     private function setRepository(CategoryRepositoryInterface $repository): ListingRouter
@@ -245,7 +295,9 @@ class ListingRouter implements RouterInterface, VersatileGeneratorInterface
 
     /**
      * Sets the used route name for this router.
+     *
      * @param string $route
+     *
      * @return ListingRouter
      */
     private function setRoute(string $route): ListingRouter
@@ -256,7 +308,11 @@ class ListingRouter implements RouterInterface, VersatileGeneratorInterface
     }
 
     /**
-     * @inheritdoc
+     * Returns true if this router supports the given route.
+     *
+     * @param mixed $name
+     *
+     * @return bool
      */
     public function supports($name)
     {

@@ -8,20 +8,21 @@ use BestIt\CtListingSlugRouter\Repository\CategoryRepositoryInterface;
 
 /**
  * Fakes the existence of a class.
+ *
  * @author blange <lange@bestit-online.de>
- * @package BestIt\CtListingSlugRouterBundle
- * @subpackage Tests
- * @version $id$
+ * @package BestIt\CtListingSlugRouterBundle\Tests
  */
 class FakeRepository implements CategoryRepositoryInterface
 {
     /**
      * Get category by slug
      *
+     * @throws CategoryNotFoundException
+     *
      * @param string $slug
      * @param bool $exceptionOnMiss Should an exception be thrown if the category is not found.
+     *
      * @return mixed
-     * @throws CategoryNotFoundException
      */
     public function getCategoryBySlug(string $slug, bool $exceptionOnMiss = true)
     {

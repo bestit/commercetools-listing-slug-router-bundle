@@ -10,15 +10,15 @@ use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
 /**
  * Class BestItCtListingSlugRouterExtensionTest
+ *
  * @author blange <lange@bestit-online.de>
- * @package BestIt\CtListingSlugRouterBundle
- * @subpackage DependencyInjection
- * @version $id$
+ * @package BestIt\CtListingSlugRouterBundle\Tests\DependencyInjection
  */
 class BestItCtListingSlugRouterExtensionTest extends AbstractExtensionTestCase
 {
     /**
      * Returns the container extensions to test.
+     *
      * @return BestItCtListingSlugRouterExtension[]
      */
     protected function getContainerExtensions(): array
@@ -30,6 +30,8 @@ class BestItCtListingSlugRouterExtensionTest extends AbstractExtensionTestCase
      * Optionally override this method to return an array that will be used as the minimal configuration for loading
      * the container extension under test, to prevent a test from failing because of a missing required
      * configuration value for the container extension.
+     *
+     * @return void
      */
     protected function getMinimalConfiguration(): array
     {
@@ -45,6 +47,8 @@ class BestItCtListingSlugRouterExtensionTest extends AbstractExtensionTestCase
 
     /**
      * Sets up the test.
+     *
+     * @return void
      */
     protected function setUp()
     {
@@ -55,6 +59,7 @@ class BestItCtListingSlugRouterExtensionTest extends AbstractExtensionTestCase
 
     /**
      * Checks if there is an event listener for refreshing the change management.
+     *
      * @return void
      */
     public function testChecksRouterServiceExistence()
@@ -68,6 +73,7 @@ class BestItCtListingSlugRouterExtensionTest extends AbstractExtensionTestCase
 
     /**
      * Checks the default values for the container.
+     *
      * @return void
      */
     public function testDefaultParameters()
@@ -85,6 +91,8 @@ class BestItCtListingSlugRouterExtensionTest extends AbstractExtensionTestCase
 
     /**
      * Checks if an exception is thrown, if there is no repo.
+     *
+     * @return void
      */
     public function testExceptionOnMissingRepo()
     {
@@ -95,6 +103,7 @@ class BestItCtListingSlugRouterExtensionTest extends AbstractExtensionTestCase
 
     /**
      * Checks the default values for the container.
+     *
      * @return void
      */
     public function testParameterValues()
@@ -112,6 +121,7 @@ class BestItCtListingSlugRouterExtensionTest extends AbstractExtensionTestCase
 
     /**
      * Checks if the repository is registered as an alias.
+     *
      * @return void
      */
     public function testRepositoryAlias()

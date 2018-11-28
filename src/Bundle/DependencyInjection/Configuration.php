@@ -8,15 +8,15 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 /**
  * Configuration class for this bundle.
+ *
  * @author chowanski <chowanski@bestit-online.de>
- * @package BestIt\CtListingSlugRouterBundle
- * @subpackage DependencyInjection
- * @version $id$
+ * @package BestIt\CtListingSlugRouterBundle\DependencyInjection
  */
 class Configuration implements ConfigurationInterface
 {
     /**
      * Parses the config.
+     *
      * @return TreeBuilder
      */
     public function getConfigTreeBuilder()

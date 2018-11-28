@@ -23,27 +23,29 @@ use Symfony\Component\Routing\RouterInterface;
  *
  * @author chowanski <chowanski@bestit-online.de>
  * @category Tests
- * @package BestIt\CtListingSlugRouter
- * @subpackage Router
- * @version $id$
+ * @package BestIt\CtListingSlugRouter\Tests
  */
 class ListingRouterTest extends TestCase
 {
     /**
      * The used repository.
+     *
      * @var CategoryRepositoryInterface|PHPUnit_Framework_MockObject_MockObject
      */
     private $repo = null;
 
     /**
      * The tested router.
+     *
      * @var ListingRouter
      */
     private $router = null;
 
     /**
      * Returns a decoded category fixture
+     *
      * @param string $filename
+     *
      * @return Category
      */
     private function getCategoryFixture(string $filename)
@@ -56,7 +58,9 @@ class ListingRouterTest extends TestCase
 
     /**
      * Returns the fixture
+     *
      * @param string $filename
+     *
      * @return string
      */
     private function getFixture(string $filename)
@@ -66,6 +70,7 @@ class ListingRouterTest extends TestCase
 
     /**
      * Sets up the test.
+     *
      * @return void
      */
     protected function setUp()
@@ -75,6 +80,7 @@ class ListingRouterTest extends TestCase
 
     /**
      * Checks the constants of the router.
+     *
      * @return void
      */
     public function testConstants()
@@ -267,6 +273,7 @@ class ListingRouterTest extends TestCase
 
     /**
      * Checks the getter.
+     *
      * @return void
      */
     public function testGetRouteDebugMessage()
@@ -276,6 +283,7 @@ class ListingRouterTest extends TestCase
 
     /**
      * Checks if the required api is registered.
+     *
      * @return void
      */
     public function testInterfaces()
@@ -325,6 +333,8 @@ class ListingRouterTest extends TestCase
 
     /**
      * Checks the default return of the method.
+     *
+     * @return void
      */
     public function testSupportsDefault()
     {
@@ -333,6 +343,8 @@ class ListingRouterTest extends TestCase
 
     /**
      * Checks the return of the method by category.
+     *
+     * @return void
      */
     public function testSupportsTrueByModel()
     {
@@ -341,6 +353,8 @@ class ListingRouterTest extends TestCase
 
     /**
      * Checks the return of the method by route.
+     *
+     * @return void
      */
     public function testSupportsTrueByRoute()
     {

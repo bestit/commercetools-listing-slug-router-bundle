@@ -7,22 +7,23 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Class FakeRepositoryTest
+ *
  * @author blange <lange@bestit-online.de>
  * @category Tests
- * @package BestIt\CtListingSlugRouterBundle
- * @subpackage Tests
- * @version $id$
+ * @package BestIt\CtListingSlugRouterBundle\Tests
  */
 class FakeRepositoryTest extends TestCase
 {
     /**
      * The fake repo.
+     *
      * @var FakeRepository
      */
     private $fixture = null;
 
     /**
      * Sets up the test.
+     *
      * @return void
      */
     protected function setUp()
@@ -32,6 +33,8 @@ class FakeRepositoryTest extends TestCase
 
     /**
      * Checks the exception call.
+     *
+     * @return void
      */
     public function testGetCategoryBySlug()
     {

@@ -6,10 +6,9 @@ use Exception;
 
 /**
  * Exception for not finding categories.
+ *
  * @author chowanski <chowanski@bestit-online.de>
- * @package BestIt\CtListingSlugRouter
- * @subpackage Exception
- * @version $id$
+ * @package BestIt\CtListingSlugRouter\Exception
  */
 class CategoryNotFoundException extends Exception
 {
